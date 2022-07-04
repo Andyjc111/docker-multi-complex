@@ -1,0 +1,21 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t Andyjc111/docker-multi-complex-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run Andyjc111/docker-multi-complex-test npm test -- -- coverage
+
+after_success:
+  - docker build -t Andyjc111/docker-multi-complex-client ./client
+  - docker build -t Andyjc111/docker-multi-complex-server ./server 
+  - docker build -t Andyjc111/docker-multi-complex-worker ./worker
+  - docker build -t Andyjc111/docker-multi-complex-nginx ./nginx
+
+  - echo "$docker_password" | docker login -u "$docker_username" --password-stdin
+  - docker push Andyjc111/docker-multi-complex-client
+  - docker push Andyjc111/docker-multi-complex-server
+  - docker push Andyjc111/docker-multi-complex-worker
+  - docker push Andyjc111/docker-multi-complex-nginx
