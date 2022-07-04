@@ -1,14 +1,22 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
 
 test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
-
-test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
-});
+    const https = require('https');
+    let endPoint = 'https://dog.ceo/api/breeds/list/all';
+    
+    https
+      .get(endPoint, (resp) => {
+        let data = '';
+    
+        resp.on('data', (chunk) => {
+          data += chunk;
+        });
+    
+        resp.on('end', () => {
+          console.log(JSON.parse(data).message);
+          console.log(JSON.parse(data).status);
+        });
+      })
+      .on('error', (err) => {
+        console.log('Error: ' + err.message);
+      });
+  });
